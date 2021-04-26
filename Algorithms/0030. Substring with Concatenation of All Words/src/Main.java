@@ -1,19 +1,23 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class Main {
     public static void main(String[] args) {
 
-        String[] words = {"word", "good", "good", "best"};
-        System.out.println(findSubstring("wordgoodgoodgoodbestword", words));
+        String[] words = {"foo", "bar"};
+        System.out.println(findSubstring("foobarfoobar", words));
 
     }
 
     public static List<Integer> findSubstring(String s, String[] words){
         LinkedList<String> containslist = new LinkedList<>();
-        LinkedList<Integer> retlist = new LinkedList<>();
+        TreeSet<Integer> retlist = new TreeSet<>();
+        LinkedList<Integer> kekW = new LinkedList<>();
         String[] wordlist = wordcombinations(words);
         boolean matches = true;
+
 
         char[] chars = s.toCharArray();
         char[] charword;
@@ -33,6 +37,9 @@ public class Main {
                                 break;
                             }
                         }
+                        else if(charword.length>j){
+                            matches=false;
+                        }
                     }
                     if(matches)retlist.add(i);
                     matches=true;
@@ -40,8 +47,13 @@ public class Main {
             }
         }
 
-        return retlist;
+        for (Integer integer : retlist) {
+            kekW.add(integer);
+        }
+
+        return kekW;
     }
+
 
     public static String[] wordcombinations(String[] words){
         LinkedList<LinkedList<String>> list = permute(words);
@@ -56,39 +68,29 @@ public class Main {
             temp = "";
             count++;
         }
-
-        for (String retword : retwords) {
-            System.out.println(retword);
-        }
         return retwords;
     }
 
     public static LinkedList<LinkedList<String>> permute(String[] words){
         LinkedList<LinkedList<String>> list = new LinkedList<>();
-        permuteData(list, new LinkedList<>(), words);
+        Arrays.sort(words);
+        permuteData(list, new LinkedList<>(), words, new boolean[words.length]);
         return list;
     }
 
-    public static LinkedList<String> checkduplicate(String[] words, String word){
-        LinkedList<String> duplicates = new LinkedList<>();
-        for (int i = 0; i < words.length; i++) {
-            if(words[i].equals(word))duplicates.add(words[i]);
-        }
-        return duplicates;
-    }
 
-    public static void permuteData(LinkedList<LinkedList<String>> list, LinkedList<String> resultList, String[] words){
-        LinkedList<String> duplicates = new LinkedList<>();
+
+    public static void permuteData(LinkedList<LinkedList<String>> list, LinkedList<String> resultList, String[] words, boolean[] used){
         if(resultList.size()==words.length)list.add(new LinkedList<>(resultList));
         else{
             for (int i = 0; i < words.length; i++) {
-                duplicates = checkduplicate(words, words[i]);
-                if(resultList.contains(words[i]))continue;
+                if(used[i] || i > 0 && words[i] == words[i-1] && !used[i-1])continue;
+                used[i]=true;
                 resultList.add(words[i]);
-                permuteData(list, resultList, words);
+                permuteData(list, resultList, words, used);
+                used[i]=false;
                 resultList.remove(resultList.size()-1);
             }
-
         }
     }
 }
