@@ -16,12 +16,8 @@ public class Main {
             if(chars[i]=='('){
                 offen++;
             }else{
-                if(offen==0||offen>1){
-                    if(temp > longest)longest = temp;
+                if(offen==0){
                     temp = 0;
-                }else{
-                    temp+=2;
-                    offen--;
                 }
 
             }
