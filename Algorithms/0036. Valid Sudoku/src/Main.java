@@ -50,7 +50,7 @@ public class Main {
         int count = 0;
         for (char[] chars : board) {
             for (char aChar : chars) {
-                if(!map.containsKey(count))map.put(count, new LinkedList<Integer>());
+                if(!map.containsKey(count))map.put(count, new LinkedList<>());
                 if(aChar!='.'){
                     if(map.get(count).contains(Integer.parseInt(String.valueOf(aChar))))return false;
                     map.get(count).add(Integer.parseInt(String.valueOf(aChar)));
